@@ -89,7 +89,7 @@ return [
     */
 
     'permissions' => [
-        // 'class' => 'Cartalyst\Sentinel\Permissions\StandardPermissions',
+        'class' => 'Cartalyst\Sentinel\Permissions\StandardPermissions',
     ],
 
     /*
