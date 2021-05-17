@@ -12,6 +12,7 @@ class User extends \Cartalyst\Sentinel\Users\EloquentUser implements Authenticat
 {
     use Authenticatable, Authorizable, CanResetPassword;
     protected $table = 'users';
+    protected $primaryKey = 'users_id';
     /**
      * The attributes that are mass assignable.
      *

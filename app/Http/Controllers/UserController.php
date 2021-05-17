@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Dingo;
-
+use App\Interfaces\JwtInterface;
 use App\Validators\UserRegisterValidator;
 use Prettus\Validator\Exceptions\ValidatorException;
 
@@ -42,7 +42,11 @@ class UserController extends Controller
             if(!$user)
             {
                 $user = Sentinel::register($data);
-                return $user;
+                $token = app(JwtInterface::class)->generate_token($user);
+                if(isset($token))
+                {
+                    dd($token);
+                }
             }
             else
             {
