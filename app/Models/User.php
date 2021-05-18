@@ -36,6 +36,7 @@ class User extends \Cartalyst\Sentinel\Users\EloquentUser implements Authenticat
     }
     public function getJWTCustomClaims()    
     {
-        return [];
+        return [
+        ];
     }
 }

@@ -35,9 +35,7 @@ class JWTTokenValidate extends BaseMiddleware
             if (! $user) {
                 abort(412,'user_not_found');
             }
-    
-            $this->events->fire('tymon.jwt.valid', $user);
-    
+        
             return $next($request);
         }
         catch(\Exception $e)

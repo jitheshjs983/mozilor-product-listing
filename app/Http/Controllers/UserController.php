@@ -11,6 +11,7 @@ use App\Implementations\JwtImplementation;
 use App\Validators\UserRegisterValidator;
 use Prettus\Validator\Exceptions\ValidatorException;
 use JWTAuth;
+use JWTFactory;
 
 class UserController extends Controller
 {
@@ -47,7 +48,7 @@ class UserController extends Controller
                 $token = $this->generate_token($user);
                 if(isset($token))
                 {
-                    dd($token);
+                    return response()->json(['user' => $user,'token' => $token['token']]);
                 }
             }
             else
@@ -66,25 +67,34 @@ class UserController extends Controller
     public function generate_token($auth)
     {
         try {
+            // // Create a token for the user
+            $token = JWTAuth::fromUser($auth);
 
-            $customClaims = [
-                'first_name' => $auth->first_name,
-                'last_name' => $auth->last_name,
-                'users_id' => $auth->users_id,
-                'email' => $auth->email
-            ];
-
-            // Create a token for the user
-            $token = JWTAuth::fromUser($auth, $customClaims);
             $claims = JWTAuth::getJWTProvider()->decode($token);
+
         } catch (\Exception $e) {
             // something went wrong whilst attempting to encode the token
            dd($e);
         }
-        return [
-                'token'=>$token,
-                'claims'=>$claims
+        
+        return  [
+            'token' => $token
         ];
+    }
+    public function dashboard(Request $request)
+    {
+        try {
+
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                    return response()->json(['user_not_found'], 404);
+            }
+            } catch (\Exception $e){
+                throw $e;
+            }
+            return response()->json(compact('user'));
+    }
+    public function login(Request $request)
+    {
     }
 
 }
