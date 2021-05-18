@@ -16,6 +16,7 @@ class User extends \Cartalyst\Sentinel\Users\EloquentUser implements Authenticat
     protected $table = 'users';
     protected $primaryKey = 'users_id';
     protected $persistableKey = 'users_id';
+    public $timestamps = true;
     /**
      * The attributes that are mass assignable.
      *

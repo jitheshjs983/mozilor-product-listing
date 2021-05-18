@@ -24,7 +24,7 @@ $api->version('v1'  , function ($api) {
         $api->post('/register','UserController@register');
     });
     $api->group(['namespace' => 'App\Http\Controllers','middleware' => 'jwt.token.expiry' ], function ($api) {
-        $api->get('/dashboard','UserController@dashboard');
+        $api->get('/dashboard','ProductController@dashboard');
     });
 });
 

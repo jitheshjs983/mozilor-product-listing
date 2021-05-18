@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\UserLoginToken;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Dingo;
 use App\Interfaces\JwtInterface;
@@ -31,7 +32,34 @@ class UserController extends Controller
      */
     public function login(Request $request)
     {
-        dd($request->all());
+        try
+        {
+            $data = $request->all();
+            $validation_rule = 'login-rule';
+            app(UserRegisterValidator::class)->with( $data )->passesOrFail($validation_rule);  // Pass validation rule depending up on the API
+            $user = Sentinel::stateless($data);
+            if($user)
+            {
+                $token = $this->generate_token($user);
+                if(isset($token))
+                {
+                    $this->token_exist_check($token,$user->users_id);
+                    return response()->json(['user' => $user,'token' => $token['token']]);
+                }
+            }
+            else
+            {
+                abort(412,'Invalid Credentials');
+            }
+
+        }
+        catch (ValidatorException $e) {
+            throw new Dingo\Api\Exception\StoreResourceFailedException('Unable to login user ', $e->getMessageBag());
+        }
+        catch(\Exception $e)
+        {
+            throw $e;
+        }
     }
     public function register(Request $request)
     {
@@ -81,17 +109,25 @@ class UserController extends Controller
             'token' => $token
         ];
     }
-    public function dashboard(Request $request)
+    public function token_exist_check($token,$users_id)
     {
-        try {
-
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
-                    return response()->json(['user_not_found'], 404);
+        try
+        {
+            $token_exist = app(UserLoginToken::class)->where('users_id',$users_id)->first();
+            if(isset($token_exist))
+            {
+                JWTAuth::invalidate(JWTAuth::setToken(($token_exist->token)));
             }
-            } catch (\Exception $e){
-                throw $e;
-            }
-            return response()->json(compact('user'));
+            $data_for_create = [
+                'users_id'   => $users_id,
+                'token'      => $token['token']
+            ];
+            app(UserLoginToken::class)->UpdateorCreate(['users_id' => $users_id],$data_for_create);
+        }
+        catch(\Exception $e)
+        {
+            throw $e;
+        }
     }
 
 }
