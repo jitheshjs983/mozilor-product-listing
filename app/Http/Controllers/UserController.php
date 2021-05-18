@@ -7,8 +7,10 @@ use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Dingo;
 use App\Interfaces\JwtInterface;
+use App\Implementations\JwtImplementation;
 use App\Validators\UserRegisterValidator;
 use Prettus\Validator\Exceptions\ValidatorException;
+use JWTAuth;
 
 class UserController extends Controller
 {
@@ -42,7 +44,7 @@ class UserController extends Controller
             if(!$user)
             {
                 $user = Sentinel::register($data);
-                $token = app(JwtInterface::class)->generate_token($user);
+                $token = $this->generate_token($user);
                 if(isset($token))
                 {
                     dd($token);
@@ -60,6 +62,29 @@ class UserController extends Controller
         {
             throw $e;
         }
+    }
+    public function generate_token($auth)
+    {
+        try {
+
+            $customClaims = [
+                'first_name' => $auth->first_name,
+                'last_name' => $auth->last_name,
+                'users_id' => $auth->users_id,
+                'email' => $auth->email
+            ];
+
+            // Create a token for the user
+            $token = JWTAuth::fromUser($auth, $customClaims);
+            $claims = JWTAuth::getJWTProvider()->decode($token);
+        } catch (\Exception $e) {
+            // something went wrong whilst attempting to encode the token
+           dd($e);
+        }
+        return [
+                'token'=>$token,
+                'claims'=>$claims
+        ];
     }
 
 }

@@ -8,11 +8,14 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-class User extends \Cartalyst\Sentinel\Users\EloquentUser implements AuthenticatableContract,AuthorizableContract,CanResetPasswordContract
+use Tymon\JWTAuth\Contracts\JWTSubject;
+
+class User extends \Cartalyst\Sentinel\Users\EloquentUser implements AuthenticatableContract,AuthorizableContract,CanResetPasswordContract,JWTSubject
 {
     use Authenticatable, Authorizable, CanResetPassword;
     protected $table = 'users';
     protected $primaryKey = 'users_id';
+    protected $persistableKey = 'users_id';
     /**
      * The attributes that are mass assignable.
      *
@@ -25,4 +28,14 @@ class User extends \Cartalyst\Sentinel\Users\EloquentUser implements Authenticat
         'password',
         'permissions'
     ];
+    protected $hidden = [
+        'password',
+    ];
+    public  function  getJWTIdentifier() {
+        return  $this->getKey();
+    }
+    public function getJWTCustomClaims()    
+    {
+        return [];
+    }
 }

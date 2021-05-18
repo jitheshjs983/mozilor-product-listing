@@ -21,19 +21,14 @@ class JwtImplementation implements JwtInterface
            
             // Create a token for the user
             $token = JWTAuth::fromUser($auth, $customClaims);
-
             $claims = JWTAuth::getJWTProvider()->decode($token);
-
-
         } catch (\Exception $e) {
             // something went wrong whilst attempting to encode the token
            dd($e);
         }
-
         return [
                 'token'=>$token,
                 'claims'=>$claims
         ];
-        
     }
 }
