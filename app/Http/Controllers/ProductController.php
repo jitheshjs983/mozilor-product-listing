@@ -108,7 +108,7 @@ class ProductController extends Controller
                 }
                 else
                 {
-                    abort(412,'Please Upload a valid CSV file');
+                    abort(412,'Please Upload CSV file with proper format.');
                 }
             }
         }
