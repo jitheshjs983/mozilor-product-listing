@@ -37,8 +37,11 @@ class ProductController extends Controller
             } catch (\Exception $e){
                 throw $e;
             }
-            $products = app(Product::class)->where('users_id',$user['users_id'])->get();
-            return response()->json(compact('products'));
+            $products = app(Product::class)
+                            ->select('product_name','price','sku_number','description')
+                            ->where('users_id',$user['users_id'])
+                            ->paginate(10);
+            return $products;
     }
     public function upload_document(Request $request)
     {
