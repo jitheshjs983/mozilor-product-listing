@@ -32,7 +32,7 @@ class ProductController extends Controller
         try {
 
             if (! $user = JWTAuth::parseToken()->authenticate()) {
-                    return response()->json(['user_not_found'], 404);
+                    return response()->json(['user_not_found'], 401);
             }
             } catch (\Exception $e){
                 throw $e;
@@ -49,7 +49,7 @@ class ProductController extends Controller
         {
 
             if (! $user = JWTAuth::parseToken()->authenticate()) {
-                    return response()->json(['user_not_found'], 404);
+                    return response()->json(['user_not_found'], 401);
             }
         } 
         catch (\Exception $e)
