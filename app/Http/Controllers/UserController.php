@@ -116,7 +116,14 @@ class UserController extends Controller
             $token_exist = app(UserLoginToken::class)->where('users_id',$users_id)->first();
             if(isset($token_exist))
             {
-                JWTAuth::invalidate(JWTAuth::setToken(($token_exist->token)));
+                try
+                {
+                    JWTAuth::invalidate(JWTAuth::setToken(($token_exist->token)));
+                }
+                catch(\Exception $e)
+                {
+                    
+                }
             }
             $data_for_create = [
                 'users_id'   => $users_id,
