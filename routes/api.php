@@ -25,6 +25,7 @@ $api->version('v1'  , function ($api) {
     });
     $api->group(['namespace' => 'App\Http\Controllers','middleware' => 'jwt.token.expiry' ], function ($api) {
         $api->get('/dashboard','ProductController@dashboard');
+        $api->post('/upload_document','ProductController@upload_document');
     });
 });
 

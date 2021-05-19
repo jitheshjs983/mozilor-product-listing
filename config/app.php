@@ -178,8 +178,7 @@ return [
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
-
-
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -236,7 +235,8 @@ return [
         'Reminder'   => Cartalyst\Sentinel\Laravel\Facades\Reminder::class,
         'Sentinel'   => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,    
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
-        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,         
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,  
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,       
     ],
 
 ];
