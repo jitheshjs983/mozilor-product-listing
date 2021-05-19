@@ -111,6 +111,10 @@ class ProductController extends Controller
                     abort(412,'Please Upload CSV file with proper format.');
                 }
             }
+            else
+            {
+                abort(412,'Please Upload CSV file');
+            }
         }
         catch (ValidatorException $e) {
             throw new Dingo\Api\Exception\StoreResourceFailedException('Unable to create product ', $e->getMessageBag());
