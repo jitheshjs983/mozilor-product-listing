@@ -101,7 +101,10 @@ class ProductController extends Controller
                             $data_for_validate['users_id'] = $data['users_id'];
                             app(Product::class)->create($data_for_validate);
                         }
+                        return ['data' => ['message' => 'successfully uploaded product details']];
                     }
+                    else
+                        abort(412,'Upload document with product details.');
                 }
                 else
                 {
