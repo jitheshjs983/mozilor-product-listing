@@ -1,5 +1,6 @@
 
 - clone the repository
+- rename .env.example to .env
 - run composer install
 - run php artisan migrate
 - run php artisan key:generate
