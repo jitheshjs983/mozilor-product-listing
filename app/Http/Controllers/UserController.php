@@ -13,7 +13,6 @@ use App\Validators\UserRegisterValidator;
 use Prettus\Validator\Exceptions\ValidatorException;
 use JWTAuth;
 use JWTFactory;
-
 class UserController extends Controller
 {
     /**
@@ -36,7 +35,7 @@ class UserController extends Controller
         {
             $data = $request->all();
             $validation_rule = 'login-rule';
-            app(UserRegisterValidator::class)->with( $data )->passesOrFail($validation_rule);  // Pass validation rule depending up on the API
+            app(UserRegisterValidator::class)->with( $data )->passesOrFail($validation_rule);
             $user = Sentinel::stateless($data);
             if($user)
             {
@@ -51,7 +50,6 @@ class UserController extends Controller
             {
                 abort(412,'Invalid Credentials');
             }
-
         }
         catch (ValidatorException $e) {
             throw new Dingo\Api\Exception\StoreResourceFailedException('Unable to login user ', $e->getMessageBag());
@@ -67,7 +65,7 @@ class UserController extends Controller
         {
             $data = $request->all();
             $validation_rule = 'register-rule';
-            app(UserRegisterValidator::class)->with( $data )->passesOrFail($validation_rule);  // Pass validation rule depending up on the API
+            app(UserRegisterValidator::class)->with( $data )->passesOrFail($validation_rule);
 
             $user = Sentinel::findByCredentials($data);
             if(!$user)
@@ -97,14 +95,11 @@ class UserController extends Controller
         try {
             // // Create a token for the user
             $token = JWTAuth::fromUser($auth);
-
             $claims = JWTAuth::getJWTProvider()->decode($token);
-
-        } catch (\Exception $e) {
-            // something went wrong whilst attempting to encode the token
-           dd($e);
+        } 
+        catch (\Exception $e) {
+            throw $e;
         }
-        
         return  [
             'token' => $token
         ];
@@ -122,7 +117,7 @@ class UserController extends Controller
                 }
                 catch(\Exception $e)
                 {
-                    
+                    throw $e;
                 }
             }
             $data_for_create = [
@@ -136,5 +131,4 @@ class UserController extends Controller
             throw $e;
         }
     }
-
 }

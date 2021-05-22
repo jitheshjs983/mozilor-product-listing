@@ -16,9 +16,6 @@ use Illuminate\Support\Facades\Route;
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1'  , function ($api) {
-    $api->group(['namespace' => 'App\Http\Controllers', 'middleware' => ['jwt.token.expiry'] ], function ($api) {
-        $api->get('/products','ProductController@get_products');
-    });
     $api->group(['namespace' => 'App\Http\Controllers' ], function ($api) {
         $api->post('/login','UserController@login');
         $api->post('/register','UserController@register');
